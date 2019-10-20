@@ -1,6 +1,7 @@
 # SJTU-CTF-2019-writeup
 SJTU-CTF 2019 WriteUp by ligongzzz.
 
+由于编写WriteUp时间仓促，部分内容可能有错误，请谅解！
 
 ## Reverse
 - [snake](Reverse/chaos.md)

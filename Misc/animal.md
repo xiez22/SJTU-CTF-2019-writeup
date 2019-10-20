@@ -17,4 +17,7 @@ b'\x80\x03c__main__\nAnimal\nq\x00)\x81q\x01}q\x02(X\x04\x00\x00\x00nameq\x03cfa
 ```
 gANjX19tYWluX18KQW5pbWFsCnEAKYFxAX1xAihYBAAAAG5hbWVxA2NmYXZvcml0ZQpuYW1lCnEEWAgAAABjYXRlZ29yeXEFY2Zhdm9yaXRlCmNhdGVnb3J5CnEGdWIu
 ```
-提交，得到了name和category。将这两个字符串使用Python打包成animal的pickle，加密为base64，提交即可得到flag。
+提交该payload，发现返回的网页中，`favorite.name`和`favorite.category`被自动替换为了答案，由此可以直接得到flag：
+```
+0ops{magic_pickle_7395a19cea06fec1}
+```
