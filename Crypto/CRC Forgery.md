@@ -9,6 +9,63 @@
 
 代码如下：
 ``` python
+import binascii
+import os
+import random
+
+def b2n(b):
+    res = 0
+    for i in b:
+        res *= 2
+        res += i
+    return res
+
+def n2b(n, length):
+    tmp = bin(n)[2:]
+    tmp = '0'*(length-len(tmp)) + tmp
+    return [int(i) for i in tmp]
+
+def s2n(s):
+    return int(binascii.hexlify(s), 16)
+
+def crc64(msg):
+    msg = n2b(s2n(msg), len(msg)*8)
+    msg += const
+    print(msg)
+    for shift in range(len(msg)-64):
+        if msg[shift]:
+            for i in range(65):
+                msg[shift+i] ^= poly[i]
+    res = msg[-64:]
+    return b2n(res)
+
+const = n2b(0xdeadbeeffeedcafe, 64)
+poly  = n2b(0x10000000247f43cb7, 65)
+
+ans_raw2 = n2b(0x1337733173311337,64)
+
+src_raw1 = bytearray.fromhex(input())
+src_raw2 = bytearray.fromhex(input())
+src_raw1 = n2b(s2n(src_raw1),len(src_raw1)*8)
+src_raw2 = n2b(s2n(src_raw2),len(src_raw2)*8)
+src_raw1+=[0 for _ in range(64)]
+src_raw2+=const
+
+for shift in range(len(src_raw1)-64):
+    if src_raw1[shift]:
+        for i in range(65):
+            src_raw1[shift+i] ^= poly[i]
+
+for shift in range(len(src_raw2)):
+    ans_raw2.insert(0,0)
+    if src_raw2[-shift-1]!=ans_raw2[-shift-1]:
+        for i in range(65):
+            ans_raw2[i] ^= poly[i]
+
+ans1 = src_raw1[-64:]
+ans2 = ans_raw2[:64]
+
+print(hex(b2n(ans1)^b2n(ans2)))
 
 ```
 

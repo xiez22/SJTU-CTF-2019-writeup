@@ -7,8 +7,75 @@
 
 我们使用pwntools连接服务器，并且通过如下的python脚本得到计数器的初始值：
 ``` python
+from pwn import *
+import time
+
+def int2hex(x):
+    ans = ''
+    while x>=0xff:
+        ans+='ff'
+        x-=0xff
+    ans+=hex(x)[2:]
+    if len(ans)<10:
+        ans='0'*(10-len(ans))+ans
+    if len(ans)%2==1:
+        ans='0'+ans
+    return ans
+
+cur_sum = 0x20 * 30
+while True:
+    sh = remote(host='111.186.57.85',port='10080')
+    print(sh.recvline())
+    flag_enc = str(sh.recvline(),encoding='ascii')
+    print(flag_enc)
+    flag_enc = eval(flag_enc[flag_enc.find('flag: ')+6:-1])
+    flag_first = b'0ops{'
+    first_enc = bytearray()
+    for i in range(5):
+        first_enc.append(flag_enc[i]^flag_first[i])
+
+    for i in range(30):
+        cur_send = int2hex(cur_sum)
+        cur_bytes = bytes.fromhex(cur_send)
+        print(cur_send)
+        sh.sendline(cur_send)
+        recv_str = str(sh.recvline(),'ascii')
+        recv_str = recv_str[recv_str.find('ciphertext: ')+12:-1]
+        recv_str = eval(recv_str)
+        print(recv_str)
+        for i in range(min(5,len(recv_str))):
+            if recv_str[i]^cur_bytes[i]!=first_enc[i]:
+                print(i)
+                print('error!')
+                break
+        else:
+            print('something good found!')
+            time.sleep(30)
+
+        cur_sum += 1
+
+    sh.close()
+
+# ffffffffffffffffffffbe
 ```
 
 得到了初始值之后，我们就可以知道密钥了，最后通过如下的Python脚本和得到的密文异或一下，得到这道题的flag。
 ``` python
+from pwn import *
+
+sh = remote(host='111.186.57.85',port='10080')
+print(sh.recvline())
+flag_enc = str(sh.recvline(),encoding='ascii')
+print(flag_enc)
+flag_enc = eval(flag_enc[flag_enc.find('flag: ')+6:-1])
+to_send = 'ffffffffffffffffffffbe'
+to_send += '0'*(60-len(to_send))
+send_bytes = bytes.fromhex(to_send)
+sh.sendline(to_send)
+recv_str = str(sh.recvline(),'ascii')
+recv_str = recv_str[recv_str.find('ciphertext: ')+12:-1]
+recv_str = eval(recv_str)
+
+for i in range(30):
+    print(chr((send_bytes[i]^recv_str[i])^flag_enc[i]),end='')
 ```
