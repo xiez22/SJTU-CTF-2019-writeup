@@ -14,7 +14,7 @@
 最终，使用这种方法，得到了flag。代码很长，就不直接贴在这里了，文末附上代码链接。
 
 ## 链接
-- [爬虫](../script/dataMaker.py)
-- [图片分割](../script/splitImg.py)
-- [神经网络](../script/PytorchCaptcha.py)
-- [提交](../script/captchaSolver.py)
+- [爬虫](https://github.com/ligongzzz/SJTU-CTF-2019-writeup/blob/master/script/dataMaker.py)
+- [图片分割](https://github.com/ligongzzz/SJTU-CTF-2019-writeup/blob/master/script/splitImg.py)
+- [神经网络](https://github.com/ligongzzz/SJTU-CTF-2019-writeup/blob/master/script/PytorchCaptcha.py)
+- [提交](https://github.com/ligongzzz/SJTU-CTF-2019-writeup/blob/master/script/captchaSolver.py)
